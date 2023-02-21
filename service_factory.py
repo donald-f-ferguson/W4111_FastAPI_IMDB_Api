@@ -29,7 +29,7 @@ class ServiceFactory:
         artist_context = dict()
         artist_context["data_service"] = self.data_service
         artist_context["key_column"] = "nconst"
-        artist_context["database"] = "s22_imdb_clean"
+        artist_context["database"] = "s23_w4111_hw2_dff"
         artist_context["collection"] = "name_basics"
 
         # Create the resource.

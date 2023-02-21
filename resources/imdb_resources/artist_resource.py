@@ -28,22 +28,27 @@ class Artist(BaseModel):
     # This would handle a name of the form "Dr. Donald Francis Ferguson IV (Darth Don)
     # See https://pypi.org/project/nameparser/ for what the fields mean.
     #
-    title: Union[str, None] = None
-    first_name: Union[str, None] = None
-    middle_name: Union[str, None] = None
-    last_name: str = None
-    suffix: Union[str, None] = None
-    nickname: Union[str, None] = None
-    full_name: str = None
+    # title: Union[str, None] = None
+    # first_name: Union[str, None] = None
+    # middle_name: Union[str, None] = None
+    # last_name: str = None
+    # suffix: Union[str, None] = None
+    #   nickname: Union[str, None] = None
+    # full_name: str = None
 
-    birth_year: str = None
-    death_year: str = None
+    # birth_year: str = None
+    # death_year: str = None
+
+    primaryName: Union[str, None] = None
+    birthYear: Union[str, None] = None
+    deathYear: Union[str, None] = None
 
     class Config:
 
         # The sample response for OpenAPI docs.
         #
         schema_extra = {
+            """
             "example": {
                 "nconst": "nm0000001",
                 "title": "Dr.",
@@ -55,6 +60,13 @@ class Artist(BaseModel):
                 "full_name": "Boris Badenov",
                 "birth_year": "1900",
                 "death_year": "2000"
+            }
+            """
+            "example": {
+                "nconst": "nm3586035",
+                "primaryName": "Maise Williams",
+                "birthYear": "1997",
+                "deathYear": None
             }
         }
 
@@ -74,16 +86,10 @@ class ArtistRsp(BaseModel):
         schema_extra = {
             "example": {
                 "data": {
-                    "nconst": "nm0000001",
-                    "title": "Dr.",
-                    "first_name": "Boris",
-                    "middle_name": "Alexander",
-                    "last_name": "Badenov",
-                    "suffix": "III",
-                    "nick_name": "Bubba",
-                    "full_name": "Boris Badenov",
-                    "birth_year": "1900",
-                    "death_year": "2000"
+                    "nconst": "nm3586035",
+                    "primaryName": "Maise Williams",
+                    "birthYear": "1997",
+                    "deathYear": None
                 },
                 "links": [
                     {"rel": "known_for_titles", "href": "/api/artists/nm0000001/known_for_titles"},
