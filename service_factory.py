@@ -29,8 +29,8 @@ class ServiceFactory:
         artist_context = dict()
         artist_context["data_service"] = self.data_service
         artist_context["key_column"] = "nconst"
-        artist_context["database"] = "s23_w4111_hw2_dff"
-        artist_context["collection"] = "name_basics"
+        artist_context["database"] = "s23_w4111_hw2_dff9"
+        artist_context["collection"] = "name_basics_all"
 
         # Create the resource.
         # Use dependency injection in a simple form.
