@@ -11,6 +11,16 @@ from abc import ABC, abstractmethod
 #
 
 
+class BaseDataServiceConfig(ABC):
+    """
+    Abstract base class for dependency injection into BaseDataServiceClass.
+
+    Just a placeholder for now.
+    """
+    def __init__(self, config):
+        self.config = config
+
+
 class BaseDataService(ABC):
     """
     A base class for defining implementations for create, retrieve, update and delete (CRUD) for databases and
@@ -23,7 +33,7 @@ class BaseDataService(ABC):
             of dependency injection (https://en.wikipedia.org/wiki/Dependency_injection).
         """
 
-        # TODO I intentionally am not using protected or private properties because having public properties.
+        # DFF TODO I intentionally am not using protected or private properties because having public properties.
         # Using public properties makes simple demos and code walk through easier.
         #
         # If you are not familiar with the concepts, see
@@ -47,5 +57,60 @@ class BaseDataService(ABC):
         """
         pass
 
-    # TODO Students will define and implement other methods.
+    @abstractmethod
+    def retrieve_by_key(self, database, collection, key_field_values):
+        """
+        Return a collection element based on values of primary key columns.
+
+        :param database: The database.
+        :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
+        :param key_field_values: A list with the values of the primary key fields in the defined order. For example,
+            if the collection's primary key fields are ["postal_code", "country_code"] then an example key fields
+            might be ["10027", "US"]
+        :return: The element with the key or None.
+        """
+        pass
+
+    @abstractmethod
+    def create(self, database, collection, new_element):
+        """
+        Inserts a new element into the collection.
+
+        :param database: The database.
+        :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
+        :param new_element: A dictionary/JSON object to insert into the collection. For SQL, this would get mapped to a
+            INSERT INTO database.collection(k1, k2, k3) VALUES(v1, v2, v3) if the new element is
+            {"k1": "v1, "k2": "v2", "k3": "v3"}.
+        :return: The primary key for the inserted element.
+        """
+        pass
+
+    @abstractmethod
+    def delete(self, database, collection, predicate):
+        """
+        Deletes all elements from the collection matching the predicate.
+
+        :param database: The database.
+        :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
+        :param predicate: A dictionary of the form {k, v}. A entity matches if the resource's property v has
+            value k, for all entries in the dictionary. That is, a match if logically
+            k1 = v1 AND k2 = v2 AND ... ...
+        :return: The number of entities effected.
+        """
+        pass
+
+    @abstractmethod
+    def update(self, database, collection, predicate, new_values):
+        """
+        Update fields in matching a predicate..
+
+        :param database: The database.
+        :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
+        :param predicate: A dictionary of the form {k, v}. A entity matches if the resource's property v has
+            value k, for all entries in the dictionary. That is, a match if logically
+            k1 = v1 AND k2 = v2 AND ... ...
+        :param new_values: A dictionary of new field values for the matching elements.
+        :return: The number of entities effected.
+        """
+        pass
 

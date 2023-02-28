@@ -152,3 +152,45 @@ class ArtistResource(BaseResource):
 
         return result
 
+    def get(self, primaryName=None, birthYear=None, deathYear=None):
+
+        result = None
+
+        ds = self.context['data_service']
+
+        predicate = dict()
+
+        if primaryName:
+            predicate['primaryName'] = primaryName
+        if birthYear:
+            if (birthYear < '1900') or (birthYear > '2023'):
+                raise ValueError("Bad birthYear")
+
+            predicate['birthYear'] = birthYear
+        if deathYear:
+            predicate['deathYear'] = deathYear
+
+        result = ds.retrieve(self.database, self.collection, predicate, None)
+
+        # Get on a path like /api/artists/id returns a single resource.
+        # The collection query returns a list of matching resources.
+        # Need to convert to a single element.
+        #
+        if result:
+            # result = result[0]
+            tmp = dict()
+            tmp["data"] = result
+
+            # This is pretty lazy and could be handled by config information.
+            #
+            tmp["links"] = [
+                #{"rel": "primaryProfessions", "href": "/api/artists/" + key + "/primaryProfession"},
+                #{"rel": "knownForTitles", "href": "/api/artists/" + key + "/knownForTitles"},
+                #{"rel": "self", "href": "/api/artists/" + key}
+            ]
+
+            # Create the response model from the dictionary.
+            result = ArtistRsp(**tmp)
+
+        return result
+

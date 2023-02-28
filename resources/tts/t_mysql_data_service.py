@@ -27,5 +27,15 @@ def t_build_sql():
     print("t_build_sql: clause=", res)
 
 
+def t_build_delete():
+    predicate = {"primaryName": "Tom Hanks", "birthYear": 1960}
+    svc = get_svc()
+    res = svc.build_delete("s23_w4111_hw2_yy5", "name_basics_all",
+                                 predicate)
+
+    print("t_build_delete: clause=", res)
+
+
 if __name__ == "__main__":
-    t_build_sql()
+    # t_build_sql()
+    t_build_delete()

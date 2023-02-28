@@ -52,11 +52,13 @@ resource_factory = ServiceFactory()
 #
 artist_resource = resource_factory.get_resource("ArtistResource")
 
+
 # See https://fastapi.tiangolo.com/tutorial/middleware/ for an explanation of middleware.
 #
 # See https://en.wikipedia.org/wiki/Cross-origin_resource_sharing for an explanation of CORS
 #
 from fastapi.middleware.cors import CORSMiddleware
+
 
 # Create the application/api server class.
 #
