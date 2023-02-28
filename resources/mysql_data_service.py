@@ -183,18 +183,6 @@ class MySQLDataService(BaseDataService):
         :return: A parameterized select statement and the args for the statement.
         """
 
-        wc, args = MySQLDataService.predicate_to_where_clause_args(predicate)
-
-        if project:
-            select_clause = ",".join(project)
-        else:
-            select_clause = "*"
-
-        sql = "select " + select_clause + " from " + \
-              database + "." + collection + wc
-
-        return sql, args
-
     @staticmethod
     def build_delete(database, collection, predicate):
         """
@@ -206,17 +194,23 @@ class MySQLDataService(BaseDataService):
         :param predicate: A dictionary of key value pairs.
             A dictionary of the form {k1: v1, k2: v2, k3: v3} result in a where clause of the form
                 where k1=v1 and k2=v2 and k3=v3.
-        :param project:A list of column names for the select statement.
-            [c1, c2, c3] results in "select c1, c2, c3 from ..."
         :return: A parameterized select statement and the args for the statement.
         """
 
-        wc, args = MySQLDataService.predicate_to_where_clause_args(predicate)
+    @staticmethod
+    def build_update(database, collection, predicate, new_values):
+        """
 
-        sql = "delete " + " from " + \
-              database + "." + collection + wc
+        Build a select statement.
 
-        return sql, args
+        :param database: The MySQL database to query.
+        :param collection: The table in the database.
+        :param predicate: A dictionary of key value pairs.
+            A dictionary of the form {k1: v1, k2: v2, k3: v3} result in a where clause of the form
+                where k1=v1 and k2=v2 and k3=v3.
+        :param The values to set in the rows.
+        :return: A parameterized select statement and the args for the statement.
+        """
 
     def retrieve(self, database, collection, predicate, project):
         """
@@ -251,15 +245,8 @@ class MySQLDataService(BaseDataService):
         :param predicate: A dictionary of the form {k, v}. A entity matches if the resource's property v has
             value k, for all entries in the dictionary. That is, a match if logically
             k1 = v1 AND k2 = v2 AND ... ...
-        :param project: A list of subsets of the entity's properties to return. That is, if the list is
-            [k1, k2, k3], this is logically like SELECT k1, k2, k3 ...
         :return: A list containing dictionaries of the projected properties for matching entities.
         """
-        conn = self.get_connection()
-
-        sql, args = self.build_select(database, collection, predicate)
-        result = self.run_q(sql, args, None, True)
-        return result
 
     def update(self, database, collection, predicate, new_data):
         """
@@ -270,15 +257,9 @@ class MySQLDataService(BaseDataService):
         :param predicate: A dictionary of the form {k, v}. A entity matches if the resource's property v has
             value k, for all entries in the dictionary. That is, a match if logically
             k1 = v1 AND k2 = v2 AND ... ...
-        :param project: A list of subsets of the entity's properties to return. That is, if the list is
-            [k1, k2, k3], this is logically like SELECT k1, k2, k3 ...
+        :param new_data: The keys and values used to form the set statement in SQL.
         :return: A list containing dictionaries of the projected properties for matching entities.
         """
-        conn = self.get_connection()
-
-        sql, args = self.build_select(database, collection, predicate)
-        result = self.run_q(sql, args, None, True)
-        return result
 
     def insert(self, database, collection, new_data):
         """
@@ -286,17 +267,9 @@ class MySQLDataService(BaseDataService):
 
         :param database: The database.
         :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
-        :param predicate: A dictionary of the form {k, v}. A entity matches if the resource's property v has
-            value k, for all entries in the dictionary. That is, a match if logically
-            k1 = v1 AND k2 = v2 AND ... ...
-        :param project: A list of subsets of the entity's properties to return. That is, if the list is
-            [k1, k2, k3], this is logically like SELECT k1, k2, k3 ...
+        :param new_data: The data to insert into the table.
         :return: A list containing dictionaries of the projected properties for matching entities.
         """
-        conn = self.get_connection()
 
-        sql, args = self.build_select(database, collection, predicate)
-        result = self.run_q(sql, args, None, True)
-        return result
 
 
