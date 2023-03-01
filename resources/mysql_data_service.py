@@ -182,6 +182,17 @@ class MySQLDataService(BaseDataService):
             [c1, c2, c3] results in "select c1, c2, c3 from ..."
         :return: A parameterized select statement and the args for the statement.
         """
+        wc, args = MySQLDataService.predicate_to_where_clause_args(predicate)
+
+        if project:
+            select_clause = ",".join(project)
+        else:
+            select_clause = "*"
+
+        sql = "select " + select_clause + " from " + \
+              database + "." + collection + wc
+
+        return sql, args
 
     @staticmethod
     def build_delete(database, collection, predicate):
@@ -231,6 +242,16 @@ class MySQLDataService(BaseDataService):
         result = self.run_q(sql, args, None, True)
         return result
 
+    def retrieve_by_key(self, database, collection, key_columns):
+        """
+        Query the data service/database and return matching items.
+
+        :param database: The database.
+        :param collection: In MySQL, this would be a table. In MongoDB this is a collection.
+        :param key_columns: List of the values for the key columns.
+        :return:The resource with the primary key matching the values.
+        """
+        raise NotImplemented()
     #
     # TODO Students implement the following operations.
     # Will add later when defining HW assignments.
@@ -261,7 +282,7 @@ class MySQLDataService(BaseDataService):
         :return: A list containing dictionaries of the projected properties for matching entities.
         """
 
-    def insert(self, database, collection, new_data):
+    def create(self, database, collection, new_data):
         """
         Query the data service/database and return matching items.
 
